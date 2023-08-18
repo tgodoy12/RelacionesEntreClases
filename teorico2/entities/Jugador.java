@@ -11,6 +11,7 @@ public class Jugador {
     private String nombre;
     private boolean mojado;
 
+
     public Jugador() {
     }
 
