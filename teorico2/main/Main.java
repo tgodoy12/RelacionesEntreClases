@@ -1,9 +1,14 @@
 package teorico2.main;
 
+import teorico2.service.JuegoService;
+
+import java.util.Scanner;
+
 /**
  * Realizar el juego de la ruleta rusa de agua en Java. Como muchos saben, el juego se trata de
  * un número de jugadores, que, con un revolver de agua, el cual posee una sola carga de agua,
  * se dispara y se moja. Las clases por hacer del juego son las siguientes:
+ *
  * Clase Revolver de agua: esta clase posee los siguientes atributos: posición actual (posición
  * del tambor que se dispara, puede que esté el agua o no) y posición agua (la posición del
  * tambor donde se encuentra el agua). Estas dos posiciones, se generarán aleatoriamente.
@@ -40,4 +45,23 @@ package teorico2.main;
  */
 
 public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in).useDelimiter("\n");
+        JuegoService juegoServ = new JuegoService();
+
+        System.out.println("Ingresar cantidad de jugadores");
+        int cantidad = scanner.nextInt();
+
+        int id;
+        String nombre;
+        for (int i = 0; i<cantidad; i++) {
+            System.out.println("Introducir id");
+            id = scanner.nextInt();
+            System.out.println("Introducir nombre");
+            nombre = scanner.next();
+            juegoServ.crearJugador(id, nombre);
+        }
+
+        juegoServ.ronda(juegoServ.jugadoresArray);
+    }
 }

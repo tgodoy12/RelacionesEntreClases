@@ -5,10 +5,12 @@ import teorico2.entities.Jugador;
 import teorico2.entities.Revolver;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class JuegoService {
-    private ArrayList<Jugador> jugadoresArray;
+    public ArrayList<Jugador> jugadoresArray;
+
 
     public JuegoService() {
         jugadoresArray = new ArrayList<>();
@@ -16,7 +18,7 @@ public class JuegoService {
     }
 
     //Jugadores
-    private void crearJugador(Integer id, String nombre) {
+    public void crearJugador(Integer id, String nombre) {
         Jugador j = new Jugador(id, nombre);
         anadirLista(j);
     }
@@ -49,19 +51,33 @@ public class JuegoService {
 
 
     private void siguienteChoro(Revolver r) {
+        Integer posA = r.getPosicionActual();
+        if (posA < 6) {
+            posA++;
+        } else {
+            posA = 1;
+        }
+    }
+
+    private boolean disparo(Revolver r) {
         boolean mojado = mojar(r);
         if (!mojado) {
-            r.setPosicionActual(r.getPosicionActual() + 1);
+            siguienteChoro(r);
+            return mojado;
+        } else {
+            return mojado;
         }
     }
 
     //Métodos de juego
-    public Juego llenarJuego(ArrayList<Jugador> jArray, Revolver r) {
+    public Juego llenarJuego(ArrayList<Jugador> jugadoresList, Revolver r) {
 
-        Juego j = new Juego(jArray, r);
+        Juego j = new Juego(jugadoresList, r);
 
         return j;
     }
+
+
 
     /** ronda(): cada ronda consiste en un jugador que se apunta con el revolver de agua y
      * aprieta el gatillo. Sí el revolver tira el agua el jugador se moja y se termina el juego, sino se
@@ -69,42 +85,14 @@ public class JuegoService {
      * mojar. Al final del juego, se debe mostrar que jugador se mojó.
      * Pensar la lógica necesaria para realizar esto, usando los atributos de la clase Juego.
      */
-    public ArrayList<Jugador> preRonda() {
-        Scanner scanner = new Scanner(System.in).useDelimiter("\n");
-        System.out.println("Introducir cantidad de jugadores. Max 6");
-        int cantidad = scanner.nextInt();
-        if (cantidad>6)  {
-            cantidad = 6;
+    public void ronda(ArrayList<Jugador> jugadoresList) {
+        Revolver r = llenarRevolver();
+        Juego nuevoJuego = llenarJuego(jugadoresList, r);
+        Iterator it = jugadoresList.iterator();
+
+        while (it.hasNext()) {
+            
         }
-
-        String nombre;
-        Integer id;
-
-        for (int i = 0; i < cantidad; i++) {
-            System.out.println("Nombre:");
-            nombre = scanner.next();
-            System.out.println("ID:");
-            id = scanner.nextInt();
-            crearJugador(id, nombre);
-        }
-
-        return jugadoresArray;
-
-    }
-
-    public void ronda() {
-        ArrayList<Jugador> jugadores = preRonda();
-        Juego j = llenarJuego(jugadores, llenarRevolver());
-
-        for (Jugador aux: jugadores) {
-            System.out.println();
-            if (aux.isMojado()) {
-                System.out.println("El jugador " + aux.getNombre() + aux.getId() + "ha ganado la partida");
-                break;
-            }
-
-        }
-
 
     }
 
