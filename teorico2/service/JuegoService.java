@@ -6,6 +6,7 @@ import teorico2.entities.Revolver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Scanner;
 
 public class JuegoService {
@@ -31,8 +32,10 @@ public class JuegoService {
     private Revolver llenarRevolver() {
         Revolver r = new Revolver();
 
-        Integer posActual = (int) (Math.random() * 7);
-        Integer posAgua = (int) (Math.random() * 7);
+
+        int posActual = (int) (Math.random() * 6) + 1;
+        int posAgua = (int) (Math.random() * 6) + 1;
+
 
         r.setPosicionActual(posActual);
         r.setPosicionAgua(posAgua);
@@ -51,16 +54,18 @@ public class JuegoService {
 
 
     private void siguienteChoro(Revolver r) {
-        Integer posA = r.getPosicionActual();
-        if (posA < 6) {
-            posA++;
-        } else {
-            posA = 1;
+        Integer posActual = r.getPosicionActual();
+        Integer posAgua = r.getPosicionAgua();
+        if (posActual != posAgua && posActual < 6) {
+            r.setPosicionActual(posActual + 1);
+        } else if(posActual == 6) {
+            r.setPosicionActual(0);
         }
     }
 
     private boolean disparo(Revolver r) {
         boolean mojado = mojar(r);
+
         if (!mojado) {
             siguienteChoro(r);
             return mojado;
@@ -88,10 +93,21 @@ public class JuegoService {
     public void ronda(ArrayList<Jugador> jugadoresList) {
         Revolver r = llenarRevolver();
         Juego nuevoJuego = llenarJuego(jugadoresList, r);
-        Iterator it = jugadoresList.iterator();
 
-        while (it.hasNext()) {
-            
+        boolean mojado;
+        for (int i=0; i<nuevoJuego.getJugadoresList().size(); i++) {
+            mojado = disparo(nuevoJuego.getR());
+            if (mojado) {
+                System.out.println("El jugador " + nuevoJuego.getJugadoresList().get(i).getNombre() + "ha ganado la jugada");
+                System.out.println("Posición actual: " + nuevoJuego.getR().getPosicionActual());
+                System.out.println("Posición del agua: " + nuevoJuego.getR().getPosicionAgua());
+                break;
+            } else {
+                System.out.println("Jugador: " + jugadoresList.get(i).getNombre());
+                System.out.println("Posición actual: " + nuevoJuego.getR().getPosicionActual());
+                System.out.println("Posición del agua: " + nuevoJuego.getR().getPosicionAgua());
+
+            }
         }
 
     }
