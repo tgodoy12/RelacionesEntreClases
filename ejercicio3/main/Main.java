@@ -1,7 +1,10 @@
 package ejercicio3.main;
 
 import ejercicio3.entities.Baraja;
+import ejercicio3.entities.Carta;
 import ejercicio3.service.BarajaService;
+
+import java.util.ArrayList;
 
 /**
  * Realizar una baraja de cartas españolas orientada a objetos. Una carta tiene un número entre 1
@@ -34,7 +37,32 @@ public class Main {
         BarajaService barajaServ = new BarajaService();
 
         Baraja newBaraja = barajaServ.crearBaraja();
+        System.out.println("Nueva baraja ordenada:");
         System.out.println(newBaraja.getCartas().toString());
+        System.out.println("------------");
+
+        System.out.println("Desordenar baraja:");
+        Baraja barajaDesordenada = barajaServ.barajar(newBaraja);
+        System.out.println(barajaDesordenada.getCartas().toString());
+        System.out.println("------------");
+
+        System.out.println("Siguiente carta:");
+        barajaServ.siguienteCarta(barajaDesordenada);
+        barajaServ.siguienteCarta(barajaDesordenada);
+        barajaServ.siguienteCarta(barajaDesordenada);
+        barajaServ.siguienteCarta(barajaDesordenada);
+        barajaServ.siguienteCarta(barajaDesordenada);
+        System.out.println("------------");
+
+        System.out.println("Número de cartas disponibles");
+        int disponibles = barajaServ.cartasDisponibles(barajaDesordenada);
+        System.out.println(disponibles);
+        System.out.println("------------");
+
+
+
+
 
     }
+
 }
